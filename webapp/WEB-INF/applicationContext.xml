@@ -14,6 +14,43 @@
         http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+        
+	<context:annotation-config />
+	<context:component-scan base-package="com.estsoft.jblog">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Repository" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+
+	<!-- 암호화된 Datasource -->
+	<bean id="dataSource" class="com.estsoft.utils.DecryptDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>Rray7d+4u/l118lO7afR3P2tmvHhHuTGdhF8pm4i9YQIu6T30gRGYTXzkTis0vU8/ia3ms9c0OU1pF1iu6o6TM2oo0VbJ5UWuk6sNlFoC52beF/L+d18ig==</value>
+		</property>
+		<property name="username">
+			<value>BU1bkVlz4thzX8okJARQI3m7P7o64y5O</value>
+		</property>
+		<property name="password">
+			<value>+p28X1gix73L7Ma8tfI/64OtFJLJzovx</value>
+		</property>
+	</bean>
+
+	<!-- MyBatis SqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
+	</bean>
+
+	<!-- MyBatis SqlSessionTemplate -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
 
 
 </beans> 
