@@ -13,13 +13,10 @@
 	<div class="center-content">
 		<c:import url="/WEB-INF/views/menu.jsp" />
 		<form class="join-form" id="join-form" method="post">
-			<label class="block-label" for="name">이름</label>
+			<label class="block-label" for="name">아이디</label>
 			<input id="name" name="name" type="text" value="">
-			<label class="block-label" for="blog-id">이메일</label>
-			<input id="blog-id" name="email" type="text"> 
 			<input id="btn-checkemail" type="button" value="id 중복체크">
 			<img id="img-checkemail" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">
-
 			<label class="block-label" for="password">패스워드</label>
 			<input id="password" name="password" type="password" />
 

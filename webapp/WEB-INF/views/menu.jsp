@@ -7,10 +7,10 @@
 	<c:choose>
 		<c:when test='${empty authUser}' >
 			<li><a href="${pageContext.request.contextPath}/user/login?next=${requestScope['javax.servlet.forward.servlet_path']}">로그인</a><li>
-			<li><a href="${pageContext.request.contextPath}/user/joinform">회원가입</a><li>
+			<li><a href="${pageContext.request.contextPath}/user/join">회원가입</a><li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="${pageContext.request.contextPath}/user/modifyform">${authUser.name } 회원정보수정</a><li>
+			<li><a href="${pageContext.request.contextPath}/user/modify">${authUser.name } 회원정보수정</a><li>
 			<li><a href="${pageContext.request.contextPath}/user/logout?next=${requestScope['javax.servlet.forward.servlet_path']}">로그아웃</a><li>
 		</c:otherwise>
 	</c:choose>

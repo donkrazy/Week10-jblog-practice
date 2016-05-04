@@ -3,10 +3,13 @@ package com.estsoft.jblog.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.estsoft.jblog.annotation.Auth;
+
 @Controller
 @RequestMapping( "/blog" )
 public class BlogController {
 	
+	@Auth
 	@RequestMapping( "/" )
 	public String root() {
 		return "blog/blog-main";

@@ -28,13 +28,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//접근 제어 (인증이 필요함)
 		HttpSession session = request.getSession();
 		if( session == null ) {
-			response.sendRedirect( request.getContextPath() + "/user/loginform" );
+			response.sendRedirect( request.getContextPath() + "/user/login" );
 			return false;
 		}
 		
 		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
 		if( authUser == null ) {
-			response.sendRedirect( request.getContextPath() + "/user/loginform" );
+			response.sendRedirect( request.getContextPath() + "/user/login" );
 			return false;
 		}
 		

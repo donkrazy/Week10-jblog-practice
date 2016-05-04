@@ -13,8 +13,7 @@
 	<div class="center-content">
 		<c:import url="/WEB-INF/views/menu.jsp" />
 		<p class="welcome-message">
-			<span> 감사합니다. 회원 가입 및 블로그가 성공적으로 만들어 졌습니다.</span>
-			<a href="">로그인 하기</a>
+			<span> ${authUser.name }님 환영합니다!. 회원 가입 및 블로그가 성공적으로 만들어 졌습니다.</span>
 		</p>
 	</div>
 </body>
