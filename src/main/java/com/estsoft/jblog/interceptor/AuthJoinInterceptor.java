@@ -28,7 +28,6 @@ public class AuthJoinInterceptor extends HandlerInterceptorAdapter {
 		userVo.setPassword(password);
 		UserVo authUser = userService.login(userVo);
 		HttpSession session = request.getSession(true);
-		System.out.println(authUser);
 		session.setAttribute("authUser", authUser );
 	}
 

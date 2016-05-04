@@ -24,5 +24,12 @@
 			</fieldset>
 		</form>
 	</div>
+	
+	
+	<ul><p>구경함 해봐라</p>
+		<li><a href="/blog/aa">aa 님의 블로그</a></li>
+		<li><a href="/blog/bb">bb 님의 블로그</a></li>
+		<li>zdf 님의 블로그</li>
+	</ul>
 </body>
 </html>

@@ -54,11 +54,12 @@ div#navigation				{ float:right; width:200px }
 div#extra					{ float:right; clear:right; width:200px }
 div#footer					{ clear:both; width:100% }
 
-/* header */
+/* header and top */
 div#header h1		{ text-align:center; line-height:100px; margin:0; color:#fff }
-div#header ul		{ height:20px } 
-div#header li		{ float:right; margin-right:10px; }
-div#header li a 	{ color:#fff; font-weight:bold; text-decoration:none; }
+div#top ul			{ height:20px } 
+div#top li			{ float:right; margin-right:10px; }
+div#top li#jblog	{ float:left; margin-right:10px; background-image: url("/");} 
+div#top li a 		{ color:#79B30B; font-weight:bold; text-decoration:none; }
 
 #header h1 a:hover	 { color:#79B30B; text-decoration:none  }
 #header h1 a:link	 { color:#79B30B; text-decoration:none  }

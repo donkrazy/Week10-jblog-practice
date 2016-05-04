@@ -22,7 +22,6 @@ public class UserController {
 		return "user/join";
 	}
 	
-	@Auth
 	@RequestMapping( value="/join", method=RequestMethod.POST )
 	public String join(@ModelAttribute UserVo vo) {
 		userService.join(vo);
@@ -36,7 +35,7 @@ public class UserController {
 	}
 	
 	@Auth
-	@RequestMapping( "/joinsuccess"  )
+	@RequestMapping( "/joinsuccess" )
 	public String loginSuccess() {
 		return "user/joinsuccess";
 	}

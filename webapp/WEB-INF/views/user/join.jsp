@@ -13,7 +13,7 @@
 	<div class="center-content">
 		<c:import url="/WEB-INF/views/menu.jsp" />
 		<form class="join-form" id="join-form" method="post">
-			<label class="block-label" for="name">아이디</label>
+			<label class="block-label" for="name">아이디(영어, 숫자만 가능합니다)</label>
 			<input id="name" name="name" type="text" value="">
 			<input id="btn-checkemail" type="button" value="id 중복체크">
 			<img id="img-checkemail" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">

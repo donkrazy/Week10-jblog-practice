@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="category">
+	<select id="selectById" resultType="categoryvo" parameterType="int">
+		<![CDATA[
+			SELECT id, name FROM categories WHERE id=#{id }
+		]]>
+	</select>
+	<select id="selectByBlogId" resultType="categoryvo" parameterType="int">
+		<![CDATA[
+			SELECT id, name FROM categories WHERE blog_id=#{id }
+		]]>
+	</select>
+	<select id="popCategory" resultType="int" parameterType="int">
+		<![CDATA[
+			Select id from categories where blog_id=#{id} limit 1;
+		]]>
+	</select>
+	<select id="selectByPostId" resultType="categoryvo" parameterType="int">
+		<![CDATA[
+			Select category_id from posts where post_id=#{id} limit 1;
+		]]>
+	</select>
+</mapper>

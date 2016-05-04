@@ -12,9 +12,8 @@
 
 	<!-- 루트(글로벌) 로거 -->
 	<!-- <root level="DEBUG"> <appender-ref ref="consoleAppender" /> </root> -->
-	<root level="WARN">
+	<root level="INFO">
 		<appender-ref ref="consoleAppender" />
-		<appender-ref ref="fileAppender" />
 	</root>
 	<!-- <root level="WARN"> <appender-ref ref="consoleAppender" /> </root> -->
 	<!-- <root level="ERROR"> <appender-ref ref="consoleAppender" /> </root> -->

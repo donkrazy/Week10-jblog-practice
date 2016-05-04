@@ -11,39 +11,39 @@
 </head>
 <body>
 	<div id="container">
+		<div id="top">
+			<c:import url="/WEB-INF/views/blog/top.jsp" />
+		</div>
 		<div id="header">
-			<h1>Spring 이야기</h1>
-			<ul>
-				<li><a href="">로그인</a></li>
-				<li><a href="">로그아웃</a></li>
-				<li><a href="">블로그 관리</a></li>
-			</ul>
+			<h1 onclick=" window.location='/blog/';">Spring 이야기</h1>
 		</div>
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 				<ul class="admin-menu">
-					<li class="selected">기본설정</li>
-					<li><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath}/blog/admin">기본설정</a></li>
+					<li><a href="${pageContext.request.contextPath}/blog/category">카테고리</a></li>
+					<li class="selected">글작성</li>
 				</ul>
 				<form action="" method="post">
-	 		      	<table class="admin-config">
+			      	<table class="admin-cat-write">
 			      		<tr>
-			      			<td class="t">블로그 제목</td>
-			      			<td><input type="text" size="40" name="title"></td>
+			      			<td class="t">제목</td>
+			      			<td>
+			      				<input type="text" size="60" name="title">
+				      			<select name="category">
+				      				<option>미분류</option>
+				      				<option>자바</option>
+				      			</select>
+				      		</td>
 			      		</tr>
 			      		<tr>
-			      			<td class="t">로고이미지</td>
-			      			<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>      			
-			      		</tr>      		
+			      			<td class="t">내용</td>
+			      			<td><textarea name="content"></textarea></td>
+			      		</tr>
 			      		<tr>
-			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" name="logo-file"></td>      			
-			      		</tr>           		
-			      		<tr>
-			      			<td class="t">&nbsp;</td>
-			      			<td class="s"><input type="submit" value="기본설정 변경"></td>      			
-			      		</tr>           		
+			      			<td>&nbsp;</td>
+			      			<td class="s"><input type="submit" value="포스트하기"></td>
+			      		</tr>
 			      	</table>
 				</form>
 			</div>
