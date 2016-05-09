@@ -8,7 +8,7 @@
 	</select>
 	<select id="selectByBlogId" resultType="categoryvo" parameterType="int">
 		<![CDATA[
-			SELECT id, name FROM categories WHERE blog_id=#{id }
+			SELECT * FROM categories WHERE blog_id=#{id }
 		]]>
 	</select>
 	<select id="popCategory" resultType="int" parameterType="int">
@@ -21,4 +21,19 @@
 			Select category_id from posts where post_id=#{id} limit 1;
 		]]>
 	</select>
+	<select id="selectBy" resultType="categoryvo" parameterType="int">
+		<![CDATA[
+			Select category_id from posts where post_id=#{id} limit 1;
+		]]>
+	</select>
+	<insert id="insert" parameterType="int">
+		<![CDATA[
+			insert into categories values( null, #{blogId }, "기본 카테고리", "기본적으로 생성되는 카테고리입니다", 0)
+		]]>
+	</insert>
+	<insert id="insertByCategoryVo" parameterType="categoryvo">
+		<![CDATA[
+			insert into categories values( null, #{blog_id }, #{name }, #{description }, 0)
+		]]>
+	</insert>
 </mapper>

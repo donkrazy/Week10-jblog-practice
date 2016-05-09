@@ -8,7 +8,24 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	xmlns:mvc="http://www.springframework.org/schema/mvc">
 
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<!--4 argument resolver -->
+		<mvc:argument-resolvers>
+			<bean class="com.estsoft.jblog.resolver.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+		
+		<!--5 message converter -->
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
 
 	<!-- 0. @Controller 스캔 -->
 	<context:annotation-config />

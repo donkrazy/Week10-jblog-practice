@@ -12,6 +12,7 @@ import com.estsoft.jblog.dao.PostDao;
 import com.estsoft.jblog.vo.BlogVo;
 import com.estsoft.jblog.vo.CategoryVo;
 import com.estsoft.jblog.vo.PostVo;
+import com.estsoft.jblog.vo.UserVo;
 
 @Service
 public class BlogService {
@@ -27,9 +28,6 @@ public class BlogService {
 	
 	public void getBlogByName(String name, Model model){
 		BlogVo blogVo = blogDao.get(name);
-		if (blogVo==null){
-			return;
-		}
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
 		CategoryVo lastCategory = categoryList.get(categoryList.size()-1);
 		List<PostVo> postList = postDao.getByCategoryId(lastCategory.getId()); 
@@ -80,5 +78,18 @@ public class BlogService {
 		model.addAttribute("postList", postList);
 		model.addAttribute("postVo", postVo);
 		model.addAttribute("categoryVo", categoryVo);
+	}
+	
+	
+	public void listCategory(UserVo userVo, Model model){
+		BlogVo blogVo = blogDao.get(userVo.getName());
+		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
+		model.addAttribute("categoryList", categoryList);
+	}
+	
+	public void addCategory(UserVo userVo, CategoryVo categoryVo){
+		BlogVo blogVo = blogDao.get(userVo.getName());
+		categoryVo.setBlog_id(blogVo.getId());
+		categoryDao.insert(categoryVo);
 	}
 }

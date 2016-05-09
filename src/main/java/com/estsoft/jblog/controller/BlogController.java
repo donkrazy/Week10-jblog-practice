@@ -3,12 +3,18 @@ package com.estsoft.jblog.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.estsoft.jblog.annotation.Auth;
+import com.estsoft.jblog.annotation.AuthUser;
 import com.estsoft.jblog.service.BlogService;
+import com.estsoft.jblog.vo.CategoryVo;
+import com.estsoft.jblog.vo.UserVo;
 
 @Controller
 @RequestMapping( "/blog" )
@@ -55,14 +61,29 @@ public class BlogController {
 	}
 	
 	@Auth
-	@RequestMapping( "/category" )
-	public String admin2() {
+	@RequestMapping( value="/category", method=RequestMethod.GET )
+	public String category(Model model , @AuthUser UserVo authUser) {
+		blogService.listCategory(authUser, model);
 		return "blog/category";
 	}
 	
 	@Auth
-	@RequestMapping( "/write" )
-	public String admin3() {
+	@ResponseBody
+	//리턴값 json이 아닌 그냥 string
+	@RequestMapping( value="/category", method=RequestMethod.POST )
+	public String addCategory(@AuthUser UserVo authUser, @ModelAttribute CategoryVo categoryVo) {
+		blogService.addCategory(authUser, categoryVo);
+		return "success";
+	}
+	
+	@Auth
+	@RequestMapping( value="/write", method=RequestMethod.GET )
+	public String writeform() {
+		return "blog/write";
+	}
+	@Auth
+	@RequestMapping( value="/write", method=RequestMethod.POST )
+	public String write() {
 		return "blog/write";
 	}
 }

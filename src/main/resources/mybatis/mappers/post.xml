@@ -11,6 +11,11 @@
 			SELECT title, content, reg_date FROM posts WHERE id=#{id }
 		]]>
 	</select>
+	<select id="selectNullPost" resultType="postvo" parameterType="int">
+		<![CDATA[
+			SELECT title, content, reg_date FROM posts WHERE id=14
+		]]>
+	</select>
 	<select id="popPostId" resultType="int" parameterType="int">
 		<![CDATA[
 			Select id from posts where category_id=#{id} order by id desc limit 1;

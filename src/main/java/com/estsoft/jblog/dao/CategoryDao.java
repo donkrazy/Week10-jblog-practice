@@ -26,4 +26,10 @@ public class CategoryDao {
 	public CategoryVo getByPostId(int id){
 		return sqlSession.selectOne("category.selectByPostId", id);
 	}
+	public void insert(int blogId){
+		sqlSession.insert("category.insert", blogId);
+	}
+	public void insert(CategoryVo categoryVo){
+		sqlSession.insert("category.insertByCategoryVo", categoryVo);
+	}
 }

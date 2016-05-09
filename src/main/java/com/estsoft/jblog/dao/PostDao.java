@@ -18,12 +18,17 @@ public class PostDao {
 	}
 	
 	public PostVo getByPostId(int post_id){
+		//post가 없는 카테고리일 때
+		if (post_id==0){
+			return sqlSession.selectOne("post.selectNullPost");
+		}
 		return sqlSession.selectOne("post.selectByPostId", post_id);
 	}
 	
-	//TODO: 카테고리에 글이 없을 때
 	public int popPostId(int category_id){
+		if(sqlSession.selectOne("post.popPostId", category_id )==null){
+			return 0;
+		}
 		return sqlSession.selectOne("post.popPostId", category_id );
 	}
-
 }

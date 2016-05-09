@@ -6,4 +6,12 @@
 			SELECT id, title, name, logo FROM blogs WHERE name=#{name }
 		]]>
 	</select>
+	<insert id="insert" parameterType="blogvo">
+		<![CDATA[
+			insert into blogs values( null, "${name }", "${name }님의 블로그", "기본logo")
+		]]>
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 </mapper>

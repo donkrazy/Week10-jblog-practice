@@ -14,8 +14,8 @@
 	<div class="center-content">
 		<c:import url="/WEB-INF/views/menu.jsp" />
 		<form method="POST" class="login-form">
-      		<label>아이디</label> <input type="text" name="name">
-      		<label>패스워드</label> <input type="text" name="password">
+      		<label>아이디</label> <input type="text" name="name" >
+      		<label>패스워드</label> <input type="password" name="password" >
       		<input type="submit" value="로그인">
 		</form>
 	</div>
