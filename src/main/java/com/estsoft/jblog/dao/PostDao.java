@@ -25,9 +25,10 @@ public class PostDao {
 		return sqlSession.selectOne("post.selectByPostId", post_id);
 	}
 	
-	public int popPostId(int category_id){
+	public PostVo popPostId(int category_id){
+		//빈 카테고리일 때
 		if(sqlSession.selectOne("post.popPostId", category_id )==null){
-			return 0;
+			return sqlSession.selectOne("post.selectNullPost");
 		}
 		return sqlSession.selectOne("post.popPostId", category_id );
 	}

@@ -30,8 +30,7 @@ public class BlogController {
 	}
 	
 	@RequestMapping( "/{name}" )
-	public String getBlog(@PathVariable("name") String name, Model model, @RequestParam(value = "cat", required=true, defaultValue="0") int cat) {
-		//TODO: 블로그를 만들지 않은 유저의 이름으로 접근할 때 처리: admin으로 연결
+	public String blogMain(@PathVariable("name") String name, Model model, @RequestParam(value = "cat", required=true, defaultValue="0") int cat) {
 		if(cat==0){
 			blogService.getBlogByName(name, model);
 			return "blog/main";
@@ -39,10 +38,7 @@ public class BlogController {
 		
 		//TODO: 포스트가 존재하지 않는 카테고리일 때 처리
 		//TODO: 또라이 유저들이 cat에 이상한 입력할때. 근데 string넣으면 400에러뜬다. 400에러페이지 만들기
-		boolean isPostExists = blogService.getBlogByCategoryId(name, model, cat);
-		if(!isPostExists){
-			return "blog/error";
-		}
+		blogService.getBlogByCategoryId(name, model, cat);
 		return "blog/main";
 	}
 
@@ -78,7 +74,8 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping( value="/write", method=RequestMethod.GET )
-	public String writeform() {
+	public String writeform(Model model , @AuthUser UserVo authUser) {
+		blogService.listCategory(authUser, model);
 		return "blog/write";
 	}
 	@Auth

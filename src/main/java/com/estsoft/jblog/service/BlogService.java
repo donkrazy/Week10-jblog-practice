@@ -31,8 +31,7 @@ public class BlogService {
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
 		CategoryVo lastCategory = categoryList.get(categoryList.size()-1);
 		List<PostVo> postList = postDao.getByCategoryId(lastCategory.getId()); 
-		int lastPostId = postDao.popPostId(lastCategory.getId());
-		PostVo postVo = postDao.getByPostId(lastPostId);
+		PostVo postVo = postDao.popPostId(lastCategory.getId());
 		//post.popCategory vs last element of list? ->
 		model.addAttribute("name", name);
 		model.addAttribute("blogVo", blogVo);

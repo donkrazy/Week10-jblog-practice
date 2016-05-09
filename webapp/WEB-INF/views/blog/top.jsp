@@ -12,6 +12,7 @@
 			<li><a href="${pageContext.request.contextPath}/user/modify">${authUser.name } 회원정보수정</a><li>
 			<li><a href="${pageContext.request.contextPath}/user/logout?next=${requestScope['javax.servlet.forward.servlet_path']}">로그아웃</a><li>
 			<li><a href="admin">내 블로그 관리</a></li>
+			<li><a href="write">새 포스팅</a></li>
 		</c:otherwise>
 	</c:choose>
 			<li id="jblog"><a href="/">Jblog</a></li>
