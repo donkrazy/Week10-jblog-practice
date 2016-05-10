@@ -3,7 +3,7 @@
 <mapper namespace="post">
 	<select id="selectByCategoryId" resultType="postvo" parameterType="int">
 		<![CDATA[
-			SELECT id, title, reg_date FROM posts WHERE category_id=#{id }
+			SELECT * FROM posts WHERE category_id=#{id }
 		]]>
 	</select>
 	<select id="selectByPostId" resultType="postvo" parameterType="int">
@@ -21,4 +21,12 @@
 			Select id from posts where category_id=#{id} order by id desc limit 1;
 		]]>
 	</select>
+	<insert id="insertPost" parameterType="postvo">
+		<![CDATA[
+			insert into posts values( null, #{category_id }, "${title }", "${content}", now() )
+		]]>
+		<selectKey keyProperty="id" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 </mapper>

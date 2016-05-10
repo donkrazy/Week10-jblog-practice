@@ -23,4 +23,9 @@ public class BlogDao {
 		sqlSession.insert("blog.insert", blogVo);
 		return blogVo.getId();
 	}
+	
+	public void update(BlogVo blogVo){
+		sqlSession.update("blog.update", blogVo);
+	}
+
 }

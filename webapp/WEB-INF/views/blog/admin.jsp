@@ -17,7 +17,7 @@
 			<c:import url="/WEB-INF/views/blog/top.jsp" />
 		</div>
 		<div id="header">
-			<h1 onclick=" window.location='/blog/';">Spring 이야기</h1>
+			<h1 onclick=" window.location='/blog/${blogVo.name}';">${blogVo.title }</h1>
 		</div>
 		<div id="wrapper">
 			<div id="content" class="full-screen">
@@ -26,20 +26,19 @@
 					<li><a href="${pageContext.request.contextPath}/blog/category">카테고리</a></li>
 					<li><a href="${pageContext.request.contextPath}/blog/write">글작성</a></li>
 				</ul>
-				<form action="" method="post">
+				<form method="post" enctype="multipart/form-data">
 					<table class="admin-config">
 						<tr>
 							<td class="t">블로그 제목</td>
-							<td><input type="text" size="40" name="title"></td>
+							<td><input type="text" size="40" name="title" value="${blogVo.title }"></td>
 						</tr>
 						<tr>
 							<td class="t">로고이미지</td>
-							<td><img
-								src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>
+							<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>
-							<td><input type="file" name="logo-file"></td>
+							<td><input type="file" name="logo"></td>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>

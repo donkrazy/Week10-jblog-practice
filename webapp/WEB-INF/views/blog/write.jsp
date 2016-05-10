@@ -17,7 +17,7 @@
 			<c:import url="/WEB-INF/views/blog/top.jsp" />
 		</div>
 		<div id="header">
-			<h1 onclick=" window.location='/blog/';">Spring 이야기</h1>
+			<h1 onclick=" window.location='/blog/${blogVo.name}';">${title }</h1>
 		</div>
 		<div id="wrapper">
 			<div id="content" class="full-screen">
@@ -31,11 +31,11 @@
 						<tr>
 							<td class="t">제목</td>
 							<td>
-								<input type="text" size="60" name="title">
-								<select name="category">
-								<c:forEach items="${categoryList }" var="vo" varStatus="status">
-								<option value="${vo.id }"> ${vo.name }</option>
-								</c:forEach>
+								<input type="text" size="60" name="title"/>
+								<select name="category_id">
+									<c:forEach items="${categoryList }" var="vo" varStatus="status">
+									<option value="${vo.id }"> ${vo.name }</option>
+									</c:forEach>
 								</select>
 							</td>
 						</tr>

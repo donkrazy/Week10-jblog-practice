@@ -55,7 +55,7 @@ $(function(){
 			<c:import url="/WEB-INF/views/blog/top.jsp" />
 		</div>
 		<div id="header">
-			<h1 onclick=" window.location='/blog/';">Spring 이야기</h1>
+			<h1 onclick=" window.location='/blog/${blogVo.name}';">${blogVo.title }</h1>
 		</div>
 		<div id="wrapper">
 			<div id="content" class="full-screen">

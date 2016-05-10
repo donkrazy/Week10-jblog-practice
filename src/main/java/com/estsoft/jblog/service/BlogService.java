@@ -41,25 +41,28 @@ public class BlogService {
 		model.addAttribute("postVo", postVo);
 	}
 	
-	public boolean getBlogByCategoryId(String name, Model model, int cat){
+	public void getBlogByCategoryId(String name, Model model, int cat){
 		BlogVo blogVo = blogDao.get(name);
 		if (blogVo==null){
-			return false;
+			return;
 		}
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
 		List<PostVo> postList = postDao.getByCategoryId(cat);
 		CategoryVo categoryVo = categoryDao.get(cat);
+		PostVo postVo;
 		if(postList.size()==0){
-			return false;
+			//Dummy post data
+			postVo = postDao.getByPostId(14);
 		}
-		PostVo postVo = postList.get(postList.size()-1);
+		else{
+			postVo = postList.get(postList.size()-1);
+		}
 		model.addAttribute("name", name);
 		model.addAttribute("blogVo", blogVo);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("postList", postList);
 		model.addAttribute("postVo", postVo);
 		model.addAttribute("categoryVo", categoryVo);
-		return true;
 	}
 	
 	public void getBlogByPostId(String name, Model model, int post_id){
@@ -84,6 +87,7 @@ public class BlogService {
 		BlogVo blogVo = blogDao.get(userVo.getName());
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
 		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("blogVo", blogVo);
 	}
 	
 	public void addCategory(UserVo userVo, CategoryVo categoryVo){
@@ -91,4 +95,17 @@ public class BlogService {
 		categoryVo.setBlog_id(blogVo.getId());
 		categoryDao.insert(categoryVo);
 	}
+	public int addPost(UserVo userVo, PostVo vo){
+		return postDao.insertPost(vo);
+	}
+	
+	public void admin(UserVo userVo, Model model){
+		BlogVo blogVo = blogDao.get(userVo.getName());
+		model.addAttribute("blogVo", blogVo);
+	}
+	public void configBlog(UserVo authUser, BlogVo blogVo){
+		blogVo.setName(authUser.getName());
+		blogDao.update(blogVo);
+	}
+	
 }

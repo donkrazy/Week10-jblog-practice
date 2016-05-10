@@ -32,4 +32,9 @@ public class PostDao {
 		}
 		return sqlSession.selectOne("post.popPostId", category_id );
 	}
+	
+	public int insertPost(PostVo postVo){
+		sqlSession.insert("post.insertPost", postVo);
+		return postVo.getId();
+	}
 }
