@@ -1,15 +1,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
-<Link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+<Link rel="stylesheet"href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script type="text/javascript">
+	$(function(){
+		$("#delete-form").submit(function(){
+			if(confirm('삭제하시겠습니까?')){
+				return true;
+			}
+			return false;
+			}
+		);
+		
+	})
+</script>
 </head>
 <body>
 	<div id="container">
@@ -23,9 +34,22 @@
 			<div id="content">
 				<div class="blog-content">
 					<p>카테고리-${categoryVo.name}</p>
+					${posvVo }
 					<h4>${postVo.title }</h4>
 					<p>${postVo.reg_date }</p>
 					<p>${postVo.content }</p>
+					
+					
+					<c:if test="${authUser.name==blogVo.name}">
+						<a href="/blog/write"><button>새 포스팅</button></a>
+					 	<c:if test="${not empty postVo.reg_date}">
+							<form id="delete-form" action="/blog/delete" method="post">
+								<input type="hidden" name="blog_name" value="${blogVo.name }"/>
+								<input type="hidden" name="post_id" value="${postVo.id }"/>
+								<button type="submit">삭제</button>
+							</form>
+						</c:if>
+					</c:if>
 				</div>
 				<br><br>----------------------------------------------------------------관련 포스팅-------------------------------------------------------------------
 				<ul class="blog-list">
@@ -38,7 +62,7 @@
 
 		<div id="extra">
 			<div class="blog-logo">
-				<img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg">
+				<img src="${blogVo.logo }">
 			</div>
 		</div>
 

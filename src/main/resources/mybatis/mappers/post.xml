@@ -8,17 +8,17 @@
 	</select>
 	<select id="selectByPostId" resultType="postvo" parameterType="int">
 		<![CDATA[
-			SELECT title, content, reg_date FROM posts WHERE id=#{id }
+			SELECT * FROM posts WHERE id=#{id }
 		]]>
 	</select>
 	<select id="selectNullPost" resultType="postvo" parameterType="int">
 		<![CDATA[
-			SELECT title, content, reg_date FROM posts WHERE id=14
+			SELECT * FROM posts WHERE id=14
 		]]>
 	</select>
-	<select id="popPostId" resultType="int" parameterType="int">
+	<select id="popPostId" resultType="postvo" parameterType="int">
 		<![CDATA[
-			Select id from posts where category_id=#{id} order by id desc limit 1;
+			Select * from posts where category_id=#{id} order by id desc limit 1;
 		]]>
 	</select>
 	<insert id="insertPost" parameterType="postvo">
@@ -29,4 +29,9 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from posts where id=#{id}
+		]]>
+	</delete>
 </mapper>

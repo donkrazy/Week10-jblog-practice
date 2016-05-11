@@ -32,4 +32,8 @@ public class CategoryDao {
 	public void insert(CategoryVo categoryVo){
 		sqlSession.insert("category.insertByCategoryVo", categoryVo);
 	}
+
+	public void delete(int category_id) {
+		sqlSession.delete("category.delete", category_id);
+	}
 }

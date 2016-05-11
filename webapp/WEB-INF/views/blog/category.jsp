@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
 <script>
 $(function(){
 	// ajax 방명록 메세지 등록
@@ -24,10 +24,10 @@ $(function(){
 			//dataType: "json",
 			//key-value pair로 보내면 된다고 한다. dataType: json명시 안해도 json으로 가는듯(.ajax가 json형식이니까)
 			data:  {"name": name, "description" : description },
-			success: function( response  ){
-				if(response == "success"){
-					$("#admin-cat").append( renderHTML(name, description) );	
-				}
+			success: function( response ){
+				//추가된 카테고리id를 받아서 append
+				$("#admin-cat").append( renderHTML(name, description, response) );
+				//TODO: 새로 추가된 링크에는 onclick이 안묻는다.
 			},
 			error: function( xhr/*XMLHttpRequest*/, status, error ) {
 				console.error( status + ":" + error );
@@ -35,17 +35,41 @@ $(function(){
 		});
 	});
 	
-	var renderHTML = function(name, description){
+	
+	var renderHTML = function(name, description, id){
 		var catLength = Number( '${fn:length(categoryList)}' ) +1 ;
-		var html = "<tr>"+
+		var html =  "<tr>"+
 					"<td>" + catLength + "</td>" +
 					"<td>" + name + "</td>" +
 					"<td>" + 0 + "</td>" +
 					"<td>" + description + "</td>" +
-					"<td><img src='" + "${pageContext.request.contextPath}/assets/images/delete.jpg" + "'/></td>" +
+					"<td><a href='#'><img class='cat-delete' data-id='" + id +
+					"' src='${pageContext.request.contextPath}/assets/images/delete.jpg'/></a></td>" +
 					"</tr>"	;
 		return html;
 	}
+	
+	$(".cat-delete" ).click( function( event ) {
+		event.preventDefault(); 
+		if(confirm("카테고리를 삭제하시겠습니까?")){
+			var category_id = $(this).attr('data-id');
+			$.ajax({
+				url:"${pageContext.request.contextPath }/blog/delete-cat/", 
+				type: "post",
+				data:  {"blog_name": '${blogVo.name}', "category_id" : category_id },
+				success: function( response  ){
+					if(response == "success"){
+						//TODO: row 제거
+						//alert($(this).hide())
+						$(this).hide();	
+					}
+				},
+				error: function( xhr/*XMLHttpRequest*/, status, error ) {
+					console.error( status + ":" + error );
+				}				
+			});
+		}
+	});
 });
 </script>
 </head>
@@ -81,7 +105,9 @@ $(function(){
 							<td>${vo.name }</td>
 							<td>${vo.count }</td>
 							<td>${vo.description }</td>
-							<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							<td>
+								<a href="#"><img class="cat-delete" data-id="${vo.id}" src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>

@@ -30,13 +30,14 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping( "/" )
-	public String root() {
-		return "/index";
+	public String root(@AuthUser UserVo authUser) {
+		return "redirect:/blog/"+authUser.getName();
 	}
-	
+		
 	@RequestMapping( "/{name}" )
 	public String blogMain(@PathVariable("name") String name, Model model, @RequestParam(value = "cat", required=true, defaultValue="0") int cat) {
 		if(cat==0){
+			//TODO: 카테고리 없이 접근했을때 그냥 블로그의 기본 카테고리로 redirect시키면 될듯
 			blogService.getBlogByName(name, model);
 			return "blog/main";
 		}
@@ -71,10 +72,11 @@ public class BlogController {
 	        String saveFileName = FileUpload.genSaveFileName( extName );
 	        FileUpload.writeFile( file, SAVE_PATH, saveFileName );
 	        String url = "/product-images/" + saveFileName;
-	        model.addAttribute( "logo", url );
+	        //XXX: 이거 안지우면 리다이렉트 url에 logo param 묻는다
+	        //model.addAttribute( "logo", url );
+	        blogService.configBlog(authUser, blogVo, url);
 		}
-		blogService.configBlog(authUser, blogVo);
-		return "redirect:/blog/admin";
+		return "redirect:/blog/admin/";
 	}
 	
 	@Auth
@@ -90,7 +92,8 @@ public class BlogController {
 	@RequestMapping( value="/category", method=RequestMethod.POST )
 	public String addCategory(@AuthUser UserVo authUser, @ModelAttribute CategoryVo categoryVo) {
 		blogService.addCategory(authUser, categoryVo);
-		return "success";
+		String addedCategoryId = String.valueOf(categoryVo.getId());
+		return addedCategoryId;
 	}
 	
 	@Auth
@@ -104,6 +107,26 @@ public class BlogController {
 	public String write(@AuthUser UserVo authUser, @ModelAttribute PostVo postVo) {
 		int postId = blogService.addPost(authUser, postVo);
 		return "redirect:/blog/"+authUser.getName()+"/"+postId;
+	}
+	
+	@Auth
+	@RequestMapping( value="/delete", method=RequestMethod.POST)
+	public String deletePost(@AuthUser UserVo authUser, @RequestParam int post_id, @RequestParam String blog_name){
+		boolean isDeleted = blogService.deletePost( post_id, blog_name, authUser );
+		if(isDeleted){
+			return "redirect:/blog/"+blog_name;
+		}
+		return "blog/deletefail";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete-cat", method = RequestMethod.POST)
+	public String deleteCategory(@AuthUser UserVo authUser, @RequestParam String blog_name, @RequestParam int category_id) {
+		boolean isDeleted = blogService.deleteCategory(authUser, blog_name, category_id);
+		if(isDeleted){
+			return "success";
+		}
+		return null;
 	}
 
 }

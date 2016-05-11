@@ -29,14 +29,14 @@ public class BlogService {
 	public void getBlogByName(String name, Model model){
 		BlogVo blogVo = blogDao.get(name);
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
-		CategoryVo lastCategory = categoryList.get(categoryList.size()-1);
-		List<PostVo> postList = postDao.getByCategoryId(lastCategory.getId()); 
-		PostVo postVo = postDao.popPostId(lastCategory.getId());
+		CategoryVo firstCategory = categoryList.get(0);
+		List<PostVo> postList = postDao.getByCategoryId(firstCategory.getId()); 
+		PostVo postVo = postDao.popPostId(firstCategory.getId());
 		//post.popCategory vs last element of list? ->
 		model.addAttribute("name", name);
 		model.addAttribute("blogVo", blogVo);
 		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("categoryVo", lastCategory);
+		model.addAttribute("categoryVo", firstCategory);
 		model.addAttribute("postList", postList);
 		model.addAttribute("postVo", postVo);
 	}
@@ -51,8 +51,7 @@ public class BlogService {
 		CategoryVo categoryVo = categoryDao.get(cat);
 		PostVo postVo;
 		if(postList.size()==0){
-			//Dummy post data
-			postVo = postDao.getByPostId(14);
+			postVo = postDao.nullPost();
 		}
 		else{
 			postVo = postList.get(postList.size()-1);
@@ -103,9 +102,29 @@ public class BlogService {
 		BlogVo blogVo = blogDao.get(userVo.getName());
 		model.addAttribute("blogVo", blogVo);
 	}
-	public void configBlog(UserVo authUser, BlogVo blogVo){
+	public void configBlog(UserVo authUser, BlogVo blogVo, String url){
 		blogVo.setName(authUser.getName());
+		blogVo.setLogo(url);
 		blogDao.update(blogVo);
 	}
 	
+	public List<UserVo> getAll(){
+		return blogDao.getAll();
+	}
+	
+	public boolean deletePost(int post_id, String blog_name, UserVo userVo){
+		if(userVo.getName().equals(blog_name)){
+			postDao.deletePost(post_id);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean deleteCategory(UserVo authUser, String blog_name, int category_id) {
+		if(authUser.getName().equals(blog_name)){
+			categoryDao.delete(category_id);
+			return true;
+		}
+		return false;
+	}
 }

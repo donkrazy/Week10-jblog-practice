@@ -7,6 +7,7 @@
 		]]>
 	</select>
 
+
 	<select id="selectByNameAndPassword" resultType="uservo"  parameterType="uservo">
 		<![CDATA[
 		SELECT name FROM users WHERE name=#{name } AND password=password(#{password })

@@ -8,8 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
-<Link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 </head>
 <body>
 	<div id="container">
@@ -34,11 +33,11 @@
 						</tr>
 						<tr>
 							<td class="t">로고이미지</td>
-							<td><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>
+							<td><img src="${blogVo.logo}"></td>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>
-							<td><input type="file" name="logo"></td>
+							<td><input type="file" name="file"></td>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>

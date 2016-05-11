@@ -1,5 +1,6 @@
 package com.estsoft.jblog.interceptor;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,14 +27,15 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 		userVo.setName(name);
 		userVo.setPassword(password);
 		UserVo authUser = userService.login(userVo);
-		//String nextURL = request.getParameter("next")==null ? "/" : request.getParameter("next");
 		if(authUser == null){
-			response.sendRedirect("/");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/loginFail.jsp");
+			rd.forward( request, response );	
 			return false;
 		}
 		HttpSession session = request.getSession(true);
 		session.setAttribute("authUser", authUser );
-		response.sendRedirect( "/" );
+		String next_url = request.getParameter("next");
+		response.sendRedirect( next_url );
 		return false;
 	}
 }

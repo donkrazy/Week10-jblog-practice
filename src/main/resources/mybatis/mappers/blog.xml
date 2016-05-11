@@ -21,4 +21,10 @@
 			update blogs set title="${title }" , logo="${logo }" where name="${name }"
 		]]>
 	</update>
+	
+	<select id="selectAll" resultType="blogvo">
+		<![CDATA[
+		SELECT name, title FROM blogs
+		]]>
+	</select>
 </mapper>

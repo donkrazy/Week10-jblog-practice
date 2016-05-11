@@ -35,5 +35,13 @@
 		<![CDATA[
 			insert into categories values( null, #{blog_id }, #{name }, #{description }, 0)
 		]]>
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 	</insert>
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from categories where id=#{id}
+		]]>
+	</delete>
 </mapper>

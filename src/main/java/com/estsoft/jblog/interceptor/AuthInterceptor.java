@@ -1,5 +1,6 @@
 package com.estsoft.jblog.interceptor;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,13 +29,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//접근 제어 (인증이 필요함)
 		HttpSession session = request.getSession();
 		if( session == null ) {
-			response.sendRedirect( request.getContextPath() + "/user/login" );
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
+			rd.forward( request, response );	
 			return false;
 		}
 		
 		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
 		if( authUser == null ) {
-			response.sendRedirect( request.getContextPath() + "/user/login" );
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
+			rd.forward( request, response );	
 			return false;
 		}
 		

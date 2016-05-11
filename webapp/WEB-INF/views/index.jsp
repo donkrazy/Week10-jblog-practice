@@ -24,12 +24,11 @@
 			</fieldset>
 		</form>
 	</div>
-	
-	
-	<ul><p>구경함 해봐라</p>
-		<li><a href="/blog/aa">aa 님의 블로그</a></li>
-		<li><a href="/blog/bb">bb 님의 블로그</a></li>
-		<li>zdf 님의 블로그</li>
+	<p>다른 놈들 블로그 구경</p>
+	<ul>
+		<c:forEach items="${users }" var="vo" varStatus="status">
+		<li><a href="/blog/${vo.name}">${vo.name} 님의 블로그 - ${vo.title }</a></li>
+		</c:forEach>
 	</ul>
 </body>
 </html>

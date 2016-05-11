@@ -15,7 +15,8 @@ public class AuthLogoutInterceptor extends HandlerInterceptorAdapter {
 			httpSession.removeAttribute("authUser");
 			httpSession.invalidate();
 		}
-		response.sendRedirect( "/" );
+		String next_url = request.getParameter("next");
+		response.sendRedirect( next_url );
 		return false;
 	}
 }

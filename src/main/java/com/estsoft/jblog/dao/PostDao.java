@@ -20,7 +20,7 @@ public class PostDao {
 	public PostVo getByPostId(int post_id){
 		//post가 없는 카테고리일 때
 		if (post_id==0){
-			return sqlSession.selectOne("post.selectNullPost");
+			return nullPost();
 		}
 		return sqlSession.selectOne("post.selectByPostId", post_id);
 	}
@@ -28,13 +28,26 @@ public class PostDao {
 	public PostVo popPostId(int category_id){
 		//빈 카테고리일 때
 		if(sqlSession.selectOne("post.popPostId", category_id )==null){
-			return sqlSession.selectOne("post.selectNullPost");
+//			return sqlSession.selectOne("post.selectNullPost");
+			return nullPost();
 		}
 		return sqlSession.selectOne("post.popPostId", category_id );
 	}
 	
 	public int insertPost(PostVo postVo){
 		sqlSession.insert("post.insertPost", postVo);
+		System.out.println(postVo);
 		return postVo.getId();
+	}
+	
+	public void deletePost(int post_id){
+		sqlSession.delete("post.delete", post_id);
+	}
+	
+	public PostVo nullPost(){
+		PostVo vo = new PostVo();
+		vo.setTitle("빈 카테고리입니다");
+		vo.setContent("글좀 써라");
+		return vo;
 	}
 }
