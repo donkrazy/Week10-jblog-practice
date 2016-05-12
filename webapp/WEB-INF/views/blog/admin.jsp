@@ -8,29 +8,31 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
-<Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<Link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/jblog.css">
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
 <script>
-$(function(){
-$("input[type='file']").change(function(){
-	$file = $(this).val();
-	if($file == null || $.isEmptyObject($file)) return;
-	var formData = new FormData(document.getElementById('logo'));
-	$.ajax({
-		url : "${pageContext.request.contextPath}/blog/logo",
-		data : formData,
-		processData : false,
-		contentType : false,
-		type : "POST",
-		success : function(response){
-			$("#이미지를 출력하는 태그의 아이디").attr("src", "${pageContext.request.contextPath}" + response.data );
-		},
-		error : function(xhr, status, error) {
-			console.error(status + " : " + error);
-		}
-	})
-})
-})
+	$(	function() {
+			$("input[type='file']").change(	function() {
+					$file = $(this).val();
+					if ($file == null || $.isEmptyObject($file))
+						return;
+					var formData = new FormData(document
+							.getElementById('logo'));
+					$.ajax({
+								url : "${pageContext.request.contextPath}/blog/logo",
+								data : formData,
+								processData : false,
+								contentType : false,
+								type : "POST",
+								success : function(response) {
+									$("#logo-image").attr("src",	"${pageContext.request.contextPath}/"+ response.data+"?timestamp="+new Date().getTime() );
+								},
+								error : function(xhr, status, error) {	console.error(status + " : " + error);
+								}
+							})
+				})
+		})
 </script>
 </head>
 <body>
@@ -48,21 +50,16 @@ $("input[type='file']").change(function(){
 					<li><a href="${pageContext.request.contextPath}/blog/category">카테고리</a></li>
 					<li><a href="${pageContext.request.contextPath}/blog/write">글작성</a></li>
 				</ul>
+				<img id="logo-image" src="${blogVo.logo}"> 로고이미지 변경
+				<form id="logo">
+					<input type="file" name="file">
+				</form>
 				<form method="post" enctype="multipart/form-data">
 					<table class="admin-config">
 						<tr>
 							<td class="t">블로그 제목</td>
-							<td><input type="text" size="40" name="title" value="${blogVo.title }"></td>
-						</tr>
-						<tr>
-							<td class="t">로고이미지</td>
-							<td><img src="${blogVo.logo}"></td>
-						</tr>
-						<tr>
-							<td class="t">&nbsp;</td>
-							<form id="logo">
-							<td><input type="file" name="file"></td>
-							</form>
+							<td><input type="text" size="40" name="title"
+								value="${blogVo.title }"></td>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>

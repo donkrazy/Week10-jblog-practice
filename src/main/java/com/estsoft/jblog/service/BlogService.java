@@ -124,9 +124,8 @@ public class BlogService {
 		return false;
 	}
 	
-	public void configBlog(UserVo authUser, BlogVo blogVo, String url){
+	public void configBlog(UserVo authUser, BlogVo blogVo){
 		blogVo.setName(authUser.getName());
-		blogVo.setLogo(url);
 		blogDao.update(blogVo);
 	}
 

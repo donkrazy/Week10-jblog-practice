@@ -134,18 +134,9 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping( value = "/admin", method=RequestMethod.POST )
-	public String adminConfig(@AuthUser UserVo authUser, @ModelAttribute BlogVo blogVo,  @RequestParam( "file" ) MultipartFile file, Model model) {
+	public String adminConfig(@AuthUser UserVo authUser, @ModelAttribute BlogVo blogVo,  Model model) {
 		//TODO: 블로그 주인이 아닐 경우 redirect??
-		if( file.isEmpty() == false ) {
-	        String fileOriginalName = file.getOriginalFilename();
-	        String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() );
-	        String saveFileName = FileUpload.genSaveFileName( extName );
-	        FileUpload.writeFile( file, SAVE_PATH, saveFileName );
-	        String url = "/product-images/" + saveFileName;
-	        //XXX: 이거 안지우면 리다이렉트 url에 logo param 묻는다
-	        //model.addAttribute( "logo", url );
-	        blogService.configBlog(authUser, blogVo, url);
-		}
+	        blogService.configBlog(authUser, blogVo);
 		return "redirect:/blog/admin/";
 	}
 	

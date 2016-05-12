@@ -18,7 +18,7 @@
 	
 	<update id="update" parameterType="blogVo">
 		<![CDATA[
-			update blogs set title="${title }" , logo="${logo }" where name="${name }"
+			update blogs set title="${title }" where name="${name }"
 		]]>
 	</update>
 	<update id="updateLogo" parameterType="blogVo">
