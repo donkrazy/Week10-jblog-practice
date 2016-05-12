@@ -34,5 +34,12 @@ public class BlogDao {
 	public List<UserVo> getAll(){
 		return sqlSession.selectList("blog.selectAll");
 	}
+
+	public void updateLogo(String name, String url) {
+		BlogVo blogVo = new BlogVo();
+		blogVo.setName(name);
+		blogVo.setLogo(url);
+		sqlSession.update("blog.updateLogo", blogVo);
+	}
 	
 }

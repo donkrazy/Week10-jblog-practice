@@ -1,8 +1,15 @@
 package com.estsoft.jblog.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.estsoft.jblog.annotation.Auth;
 import com.estsoft.jblog.annotation.AuthUser;
@@ -62,23 +70,7 @@ public class BlogController {
 		return "blog/admin";
 	}
 	
-	@Auth
-	@RequestMapping( value = "/admin", method=RequestMethod.POST )
-	public String adminConfig(@AuthUser UserVo authUser, @ModelAttribute BlogVo blogVo,  @RequestParam( "file" ) MultipartFile file, Model model) {
-		//TODO: 블로그 주인이 아닐 경우 redirect??
-		if( file.isEmpty() == false ) {
-	        String fileOriginalName = file.getOriginalFilename();
-	        String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() );
-	        String saveFileName = FileUpload.genSaveFileName( extName );
-	        FileUpload.writeFile( file, SAVE_PATH, saveFileName );
-	        String url = "/product-images/" + saveFileName;
-	        //XXX: 이거 안지우면 리다이렉트 url에 logo param 묻는다
-	        //model.addAttribute( "logo", url );
-	        blogService.configBlog(authUser, blogVo, url);
-		}
-		return "redirect:/blog/admin/";
-	}
-	
+
 	@Auth
 	@RequestMapping( value="/category", method=RequestMethod.GET )
 	public String category(Model model , @AuthUser UserVo authUser) {
@@ -90,7 +82,10 @@ public class BlogController {
 	@ResponseBody
 	//리턴값 json이 아닌 그냥 string
 	@RequestMapping( value="/category", method=RequestMethod.POST )
-	public String addCategory(@AuthUser UserVo authUser, @ModelAttribute CategoryVo categoryVo) {
+	public String addCategory(@AuthUser UserVo authUser, @ModelAttribute @Valid CategoryVo categoryVo, BindingResult result) {
+		if ( result.hasErrors() ) {
+			return "";
+		}
 		blogService.addCategory(authUser, categoryVo);
 		String addedCategoryId = String.valueOf(categoryVo.getId());
 		return addedCategoryId;
@@ -102,9 +97,16 @@ public class BlogController {
 		blogService.listCategory(authUser, model);
 		return "blog/write";
 	}
+	
 	@Auth
 	@RequestMapping( value="/write", method=RequestMethod.POST )
-	public String write(@AuthUser UserVo authUser, @ModelAttribute PostVo postVo) {
+	public String write(@AuthUser UserVo authUser, @ModelAttribute @Valid PostVo postVo, BindingResult result, Model model) {
+		if ( result.hasErrors() ) {
+			model.addAllAttributes( result.getModel() );
+			blogService.listCategory(authUser, model);
+			return "blog/write";
+		}
+		blogService.addPost(authUser, postVo);
 		int postId = blogService.addPost(authUser, postVo);
 		return "redirect:/blog/"+authUser.getName()+"/"+postId;
 	}
@@ -127,6 +129,52 @@ public class BlogController {
 			return "success";
 		}
 		return null;
+	}
+	
+	
+	@Auth
+	@RequestMapping( value = "/admin", method=RequestMethod.POST )
+	public String adminConfig(@AuthUser UserVo authUser, @ModelAttribute BlogVo blogVo,  @RequestParam( "file" ) MultipartFile file, Model model) {
+		//TODO: 블로그 주인이 아닐 경우 redirect??
+		if( file.isEmpty() == false ) {
+	        String fileOriginalName = file.getOriginalFilename();
+	        String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() );
+	        String saveFileName = FileUpload.genSaveFileName( extName );
+	        FileUpload.writeFile( file, SAVE_PATH, saveFileName );
+	        String url = "/product-images/" + saveFileName;
+	        //XXX: 이거 안지우면 리다이렉트 url에 logo param 묻는다
+	        //model.addAttribute( "logo", url );
+	        blogService.configBlog(authUser, blogVo, url);
+		}
+		return "redirect:/blog/admin/";
+	}
+	
+	
+	//TODO: ajax 파일 업로드
+	@Auth
+	@RequestMapping(value="/logo", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> ajaxList(MultipartHttpServletRequest request, @AuthUser UserVo authUser){	
+		Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */
+			//fileUpload
+			MultipartFile mpf = request.getFile(itr.next());
+			if(mpf.isEmpty() == false){ /* 파일 유효성 확인 */
+				String fileOriginalName = mpf.getOriginalFilename(); //파일 이름
+				String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
+				String saveFileName = FileUpload.genSaveFileName( extName );
+				FileUpload.writeFile(mpf, SAVE_PATH, saveFileName);
+				String url = "/product-images/" + saveFileName;    
+				map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
+				map.put("data", url); //response로 '데이터 : 파일URL'을 보내줌
+				//upload database
+				blogService.updateLogo(authUser, url); //업로드한 파일명 DB에 저장
+			}
+			return map;
+		}else{	
+			return null;
+		}
 	}
 
 }

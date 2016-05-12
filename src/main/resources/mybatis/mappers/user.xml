@@ -19,4 +19,10 @@
 		INSERT INTO users VALUES (#{name }, password(#{password }), now() + interval 9 hour )
 		]]>
 	</insert>
+	
+	<select id="check-id" resultType="int" parameterType="string">
+		<![CDATA[
+		select count(*) from users where name=#{name}
+		]]>
+	</select>
 </mapper>

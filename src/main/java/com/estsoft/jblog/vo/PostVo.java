@@ -1,9 +1,13 @@
 package com.estsoft.jblog.vo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class PostVo {
 	int id;
 	int category_id;
+	@NotEmpty(message="포스트 제목좀 서라")
 	String title;
+	@NotEmpty(message="포스트 내용도 안쓰냐")
 	String content;
 	String reg_date;
 	public int getId() {

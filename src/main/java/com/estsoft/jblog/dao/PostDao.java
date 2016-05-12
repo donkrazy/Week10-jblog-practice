@@ -36,7 +36,6 @@ public class PostDao {
 	
 	public int insertPost(PostVo postVo){
 		sqlSession.insert("post.insertPost", postVo);
-		System.out.println(postVo);
 		return postVo.getId();
 	}
 	

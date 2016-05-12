@@ -9,6 +9,29 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+<script>
+$(function(){
+$("input[type='file']").change(function(){
+	$file = $(this).val();
+	if($file == null || $.isEmptyObject($file)) return;
+	var formData = new FormData(document.getElementById('logo'));
+	$.ajax({
+		url : "${pageContext.request.contextPath}/blog/logo",
+		data : formData,
+		processData : false,
+		contentType : false,
+		type : "POST",
+		success : function(response){
+			$("#이미지를 출력하는 태그의 아이디").attr("src", "${pageContext.request.contextPath}" + response.data );
+		},
+		error : function(xhr, status, error) {
+			console.error(status + " : " + error);
+		}
+	})
+})
+})
+</script>
 </head>
 <body>
 	<div id="container">
@@ -37,7 +60,9 @@
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>
+							<form id="logo">
 							<td><input type="file" name="file"></td>
+							</form>
 						</tr>
 						<tr>
 							<td class="t">&nbsp;</td>

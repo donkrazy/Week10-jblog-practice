@@ -1,9 +1,13 @@
 package com.estsoft.jblog.vo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class CategoryVo {
 	int id;
 	int blog_id;
+	@NotEmpty(message="카테고리 이름이 비어있따")
 	String name;
+	@NotEmpty(message="카테고리 설명좀")
 	String description;
 	int count;
 	public int getId() {

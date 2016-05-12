@@ -1,7 +1,6 @@
 package com.estsoft.jblog.service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +44,11 @@ public class UserService {
 		return vo;
 	}
 	
-
+	public String checkId(String name){
+		int deleted = userDao.checkId(name);
+		if(deleted!=0){
+			return "duplicated";
+		}
+		return "success";
+	}
 }

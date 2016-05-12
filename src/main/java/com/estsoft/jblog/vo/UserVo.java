@@ -1,9 +1,15 @@
 package com.estsoft.jblog.vo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class UserVo {
+	
+	@NotEmpty(message="이름이 비어있다")
 	private String name;
+	@NotEmpty(message="패스워드가 비어있다")
 	private String password;
 	private String reg_date;
+	
 	public String getName() {
 		return name;
 	}

@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!doctype html>
@@ -17,7 +18,7 @@
 			<c:import url="/WEB-INF/views/blog/top.jsp" />
 		</div>
 		<div id="header">
-			<h1 onclick=" window.location='/blog/${blogVo.name}';">${title }</h1>
+			<h1 onclick=" window.location='/blog/${blogVo.name}';">${blogVo.title }</h1>
 		</div>
 		<div id="wrapper">
 			<div id="content" class="full-screen">
@@ -30,19 +31,30 @@
 					<table class="admin-cat-write">
 						<tr>
 							<td class="t">제목</td>
-							<td>
-								<input type="text" size="60" name="title"/>
-								<select name="category_id">
+							<td><input type="text" size="60" name="title" />
+							<spring:hasBindErrors name="postVo">
+									<c:if test="${errors.hasFieldErrors('title') }">
+										<br>
+										<strong style="color: red">${errors.getFieldError( 'title' ).defaultMessage }</strong>
+									</c:if>
+								</spring:hasBindErrors>
+							<select	name="category_id">
 									<c:forEach items="${categoryList }" var="vo" varStatus="status">
-									<option value="${vo.id }"> ${vo.name }</option>
+										<option value="${vo.id }">${vo.name }</option>
 									</c:forEach>
-								</select>
-							</td>
+							</select></td>
 						</tr>
 						<tr>
 							<td class="t">내용</td>
 							<td><textarea name="content"></textarea></td>
 						</tr>
+						<spring:hasBindErrors name="postVo">
+								<c:if test="${errors.hasFieldErrors('content') }">
+									<br>
+									<strong style="color: red">${errors.getFieldError( 'content' ).defaultMessage }</strong>
+								</c:if>
+							</spring:hasBindErrors>
+							
 						<tr>
 							<td>&nbsp;</td>
 							<td class="s"><input type="submit" value="포스트하기"></td>

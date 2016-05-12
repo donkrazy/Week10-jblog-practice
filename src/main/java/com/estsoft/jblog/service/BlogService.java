@@ -102,11 +102,7 @@ public class BlogService {
 		BlogVo blogVo = blogDao.get(userVo.getName());
 		model.addAttribute("blogVo", blogVo);
 	}
-	public void configBlog(UserVo authUser, BlogVo blogVo, String url){
-		blogVo.setName(authUser.getName());
-		blogVo.setLogo(url);
-		blogDao.update(blogVo);
-	}
+
 	
 	public List<UserVo> getAll(){
 		return blogDao.getAll();
@@ -126,5 +122,15 @@ public class BlogService {
 			return true;
 		}
 		return false;
+	}
+	
+	public void configBlog(UserVo authUser, BlogVo blogVo, String url){
+		blogVo.setName(authUser.getName());
+		blogVo.setLogo(url);
+		blogDao.update(blogVo);
+	}
+
+	public void updateLogo(UserVo authUser, String url) {
+		blogDao.updateLogo(authUser.getName(), url);
 	}
 }

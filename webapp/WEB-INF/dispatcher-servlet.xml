@@ -81,6 +81,5 @@
 	<!--7 the mvc resources tag does the magic -->
  	<mvc:resources mapping="/product-images/**" location="file:/springfile/" />
 
-
-
-</beans>
+	<!--8 AOP Auto Proxy -->
+	<aop:aspectj-autoproxy /></beans>

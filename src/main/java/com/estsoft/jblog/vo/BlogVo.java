@@ -1,8 +1,11 @@
 package com.estsoft.jblog.vo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class BlogVo {
 	int id;
 	String name;
+	@NotEmpty(message="제목이 비어있따")
 	String title;
 	String logo;
 	public int getId() {

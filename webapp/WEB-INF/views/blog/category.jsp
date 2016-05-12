@@ -25,9 +25,12 @@ $(function(){
 			//key-value pair로 보내면 된다고 한다. dataType: json명시 안해도 json으로 가는듯(.ajax가 json형식이니까)
 			data:  {"name": name, "description" : description },
 			success: function( response ){
-				//추가된 카테고리id를 받아서 append
+				//추가된 카테고리id=response를 받아서 append
+				if(response==""){
+					alert("카테고리 항목좀 채워라");
+					return false;
+				}
 				$("#admin-cat").append( renderHTML(name, description, response) );
-				//TODO: 새로 추가된 링크에는 onclick이 안묻는다.
 			},
 			error: function( xhr/*XMLHttpRequest*/, status, error ) {
 				console.error( status + ":" + error );
@@ -35,10 +38,9 @@ $(function(){
 		});
 	});
 	
-	
 	var renderHTML = function(name, description, id){
 		var catLength = Number( '${fn:length(categoryList)}' ) +1 ;
-		var html =  "<tr>"+
+		var html =  "<tr data-tr='"+ id +"'>"+
 					"<td>" + catLength + "</td>" +
 					"<td>" + name + "</td>" +
 					"<td>" + 0 + "</td>" +
@@ -49,7 +51,7 @@ $(function(){
 		return html;
 	}
 	
-	$(".cat-delete" ).click( function( event ) {
+	$(document).on("click", ".cat-delete", function( event ) {
 		event.preventDefault(); 
 		if(confirm("카테고리를 삭제하시겠습니까?")){
 			var category_id = $(this).attr('data-id');
@@ -59,9 +61,7 @@ $(function(){
 				data:  {"blog_name": '${blogVo.name}', "category_id" : category_id },
 				success: function( response  ){
 					if(response == "success"){
-						//TODO: row 제거
-						//alert($(this).hide())
-						$(this).hide();	
+						$("tr[data-tr='" + category_id +"']").remove();
 					}
 				},
 				error: function( xhr/*XMLHttpRequest*/, status, error ) {
@@ -100,7 +100,7 @@ $(function(){
 		      		
 		      		<c:set var="categories-count" value="${fn:length(categoryList) }" />
 		      		<c:forEach items="${categoryList }" var="vo" varStatus="status">
-						<tr>
+						<tr data-tr="${vo.id }">
 							<td>${status.count }</td>
 							<td>${vo.name }</td>
 							<td>${vo.count }</td>

@@ -28,4 +28,8 @@ public class UserDao {
 	public void insert( UserVo vo ) {
 		sqlSession.insert( "user.insert", vo );
 	}
+	
+	public int checkId(String name){
+		return sqlSession.selectOne("user.check-id", name);
+	}
 }
