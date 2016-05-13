@@ -64,7 +64,7 @@
 		<div id="extra">
 			<div class="blog-logo">
 				<a href="/blog/admin">
-				<img src="${blogVo.logo }">
+				<img src="/product-images/${blogVo.logo }">
 				</a>
 			</div>
 		</div>

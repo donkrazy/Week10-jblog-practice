@@ -50,7 +50,7 @@
 					<li><a href="${pageContext.request.contextPath}/blog/category">카테고리</a></li>
 					<li><a href="${pageContext.request.contextPath}/blog/write">글작성</a></li>
 				</ul>
-				<img id="logo-image" src="${blogVo.logo}"> 로고이미지 변경
+				<img id="logo-image" src="/product-images/${blogVo.logo}"> 로고이미지 변경
 				<form id="logo">
 					<input type="file" name="file">
 				</form>

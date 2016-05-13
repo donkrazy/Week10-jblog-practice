@@ -85,7 +85,7 @@
 	
 	
 	<!--7 the mvc resources tag does the magic -->
- 	<mvc:resources mapping="/product-images/**" location="file:/springfile/" />
+ 	<mvc:resources mapping="/product-images/**" location="http://donkrazy.s3-website.ap-northeast-2.amazonaws.com/jblog/" />
 
 	<!--8 AOP Auto Proxy -->
 	<aop:aspectj-autoproxy /></beans>

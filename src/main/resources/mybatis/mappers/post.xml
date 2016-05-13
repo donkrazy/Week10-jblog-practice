@@ -18,7 +18,7 @@
 	</select>
 	<insert id="insertPost" parameterType="postvo">
 		<![CDATA[
-			insert into posts values( null, #{category_id }, "${title }", "${content}", DATE_ADD(NOW(), INTERVAL 2 HOUR) )
+			insert into posts values( null, #{category_id }, "${title }", "${content}", DATE_ADD(NOW(), INTERVAL 9 HOUR) )
 		]]>
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID()

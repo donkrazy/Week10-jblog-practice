@@ -156,11 +156,10 @@ public class BlogController {
 				String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
 				String saveFileName = FileUpload.genSaveFileName( extName );
 				FileUpload.writeFile(mpf, SAVE_PATH, saveFileName);
-				String url = "/product-images/" + saveFileName;    
 				map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
-				map.put("data", url); //response로 '데이터 : 파일URL'을 보내줌
+				map.put("data", saveFileName); //response로 '데이터 : 파일URL'을 보내줌
 				//upload database
-				blogService.updateLogo(authUser, url); //업로드한 파일명 DB에 저장
+				blogService.updateLogo(authUser, saveFileName); //업로드한 파일명 DB에 저장
 			}
 			return map;
 		}else{	
