@@ -46,6 +46,7 @@
 							<form id="delete-form" action="/blog/delete" method="post">
 								<input type="hidden" name="blog_name" value="${blogVo.name }"/>
 								<input type="hidden" name="post_id" value="${postVo.id }"/>
+								<input type="hidden" name="category_id" value="${categoryVo.id}"/>
 								<button type="submit">삭제</button>
 							</form>
 						</c:if>
@@ -62,7 +63,9 @@
 
 		<div id="extra">
 			<div class="blog-logo">
+				<a href="/blog/admin">
 				<img src="${blogVo.logo }">
+				</a>
 			</div>
 		</div>
 

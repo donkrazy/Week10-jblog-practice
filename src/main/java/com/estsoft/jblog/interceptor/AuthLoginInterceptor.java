@@ -34,7 +34,7 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 		}
 		HttpSession session = request.getSession(true);
 		session.setAttribute("authUser", authUser );
-		String next_url = request.getParameter("next");
+		String next_url = request.getParameter("next")==null?"/":request.getParameter("next");
 		response.sendRedirect( next_url );
 		return false;
 	}

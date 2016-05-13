@@ -70,8 +70,9 @@ public class BlogService {
 			return;
 		}
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
-		CategoryVo categoryVo = categoryList.get(categoryList.size()-1);
-		List<PostVo> postList = postDao.getByCategoryId(categoryVo.getId());
+		int category_id = postDao.getByPostId(post_id).getCategory_id();
+		CategoryVo categoryVo = categoryDao.get(category_id);
+		List<PostVo> postList = postDao.getByCategoryId(category_id);
 		PostVo postVo = postDao.getByPostId(post_id);
 		model.addAttribute("name", name);
 		model.addAttribute("blogVo", blogVo);
@@ -95,6 +96,7 @@ public class BlogService {
 		categoryDao.insert(categoryVo);
 	}
 	public int addPost(UserVo userVo, PostVo vo){
+		categoryDao.incrementCount(vo.getCategory_id());
 		return postDao.insertPost(vo);
 	}
 	
@@ -108,9 +110,10 @@ public class BlogService {
 		return blogDao.getAll();
 	}
 	
-	public boolean deletePost(int post_id, String blog_name, UserVo userVo){
+	public boolean deletePost(int post_id, String blog_name, UserVo userVo, int category_id){
 		if(userVo.getName().equals(blog_name)){
 			postDao.deletePost(post_id);
+			categoryDao.decrementCount(category_id);
 			return true;
 		}
 		return false;

@@ -106,17 +106,17 @@ public class BlogController {
 			blogService.listCategory(authUser, model);
 			return "blog/write";
 		}
-		blogService.addPost(authUser, postVo);
 		int postId = blogService.addPost(authUser, postVo);
 		return "redirect:/blog/"+authUser.getName()+"/"+postId;
 	}
 	
 	@Auth
 	@RequestMapping( value="/delete", method=RequestMethod.POST)
-	public String deletePost(@AuthUser UserVo authUser, @RequestParam int post_id, @RequestParam String blog_name){
-		boolean isDeleted = blogService.deletePost( post_id, blog_name, authUser );
+	public String deletePost(@AuthUser UserVo authUser, @RequestParam int post_id, @RequestParam String blog_name, @RequestParam int category_id){
+		boolean isDeleted = blogService.deletePost( post_id, blog_name, authUser, category_id );
 		if(isDeleted){
-			return "redirect:/blog/"+blog_name;
+			String category_url = blog_name+"?cat="+category_id;
+			return "redirect:/blog/"+ category_url;
 		}
 		return "blog/deletefail";
 	}
@@ -145,7 +145,7 @@ public class BlogController {
 	@Auth
 	@RequestMapping(value="/logo", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> ajaxList(MultipartHttpServletRequest request, @AuthUser UserVo authUser){	
+	public Object ajaxList(MultipartHttpServletRequest request, @AuthUser UserVo authUser){	
 		Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */

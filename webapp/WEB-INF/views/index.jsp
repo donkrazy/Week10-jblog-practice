@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
 </head>
 <body>
 	<div class="center-content">

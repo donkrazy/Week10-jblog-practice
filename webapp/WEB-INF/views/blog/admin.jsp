@@ -12,27 +12,27 @@
 	href="${pageContext.request.contextPath}/assets/css/jblog.css">
 <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
 <script>
-	$(	function() {
-			$("input[type='file']").change(	function() {
-					$file = $(this).val();
-					if ($file == null || $.isEmptyObject($file))
-						return;
-					var formData = new FormData(document
-							.getElementById('logo'));
-					$.ajax({
-								url : "${pageContext.request.contextPath}/blog/logo",
-								data : formData,
-								processData : false,
-								contentType : false,
-								type : "POST",
-								success : function(response) {
-									$("#logo-image").attr("src",	"${pageContext.request.contextPath}/"+ response.data+"?timestamp="+new Date().getTime() );
-								},
-								error : function(xhr, status, error) {	console.error(status + " : " + error);
-								}
-							})
-				})
+	$(function() {
+		$("input[type='file']").change(	function() {
+			$file = $(this).val();
+			if ($file == null || $.isEmptyObject($file)) return;
+			var formData = new FormData(document.getElementById('logo'));
+			$.ajax({
+				url : "${pageContext.request.contextPath}/blog/logo",
+				data : formData,
+				dataType : "json",
+				processData : false,
+				contentType : false,
+				type : "POST",
+				success : function(response) {
+					var imgurl = "${pageContext.request.contextPath}" + response.data;
+					$("#logo-image").attr("src", imgurl);
+				},
+				error : function(xhr, status, error) {	console.error(status + " : " + error);
+				}
+			})
 		})
+	})
 </script>
 </head>
 <body>

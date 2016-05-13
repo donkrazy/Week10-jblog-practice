@@ -2,8 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!doctype html>
 <html>
 <head>
@@ -54,7 +53,6 @@
 									<strong style="color: red">${errors.getFieldError( 'content' ).defaultMessage }</strong>
 								</c:if>
 							</spring:hasBindErrors>
-							
 						<tr>
 							<td>&nbsp;</td>
 							<td class="s"><input type="submit" value="포스트하기"></td>
@@ -64,9 +62,7 @@
 			</div>
 		</div>
 		<div id="footer">
-			<p>
-				<strong>Spring 이야기</strong> is powered by JBlog (c)2016
-			</p>
+			<p><strong>Spring 이야기</strong> is powered by JBlog (c)2016</p>
 		</div>
 	</div>
 </body>

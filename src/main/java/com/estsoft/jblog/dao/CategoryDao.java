@@ -23,9 +23,6 @@ public class CategoryDao {
 	public int popCategory(int blog_id){
 		return sqlSession.selectOne("category.popCategory", blog_id );
 	}
-	public CategoryVo getByPostId(int id){
-		return sqlSession.selectOne("category.selectByPostId", id);
-	}
 	public void insert(int blogId){
 		sqlSession.insert("category.insert", blogId);
 	}
@@ -35,5 +32,11 @@ public class CategoryDao {
 
 	public void delete(int category_id) {
 		sqlSession.delete("category.delete", category_id);
+	}
+	public void incrementCount(int category_id) {
+		sqlSession.update("category.incrementCount", category_id);
+	}
+	public void decrementCount(int category_id) {
+		sqlSession.update("category.decrementCount", category_id);
 	}
 }

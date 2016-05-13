@@ -11,11 +11,6 @@
 			SELECT * FROM posts WHERE id=#{id }
 		]]>
 	</select>
-	<select id="selectNullPost" resultType="postvo" parameterType="int">
-		<![CDATA[
-			SELECT * FROM posts WHERE id=14
-		]]>
-	</select>
 	<select id="popPostId" resultType="postvo" parameterType="int">
 		<![CDATA[
 			Select * from posts where category_id=#{id} order by id desc limit 1;
@@ -23,7 +18,7 @@
 	</select>
 	<insert id="insertPost" parameterType="postvo">
 		<![CDATA[
-			insert into posts values( null, #{category_id }, "${title }", "${content}", now() )
+			insert into posts values( null, #{category_id }, "${title }", "${content}", DATE_ADD(NOW(), INTERVAL 2 HOUR) )
 		]]>
 		<selectKey keyProperty="id" resultType="int">
 			SELECT LAST_INSERT_ID()

@@ -16,16 +16,7 @@
 			Select id from categories where blog_id=#{id} limit 1;
 		]]>
 	</select>
-	<select id="selectByPostId" resultType="categoryvo" parameterType="int">
-		<![CDATA[
-			Select category_id from posts where post_id=#{id} limit 1;
-		]]>
-	</select>
-	<select id="selectBy" resultType="categoryvo" parameterType="int">
-		<![CDATA[
-			Select category_id from posts where post_id=#{id} limit 1;
-		]]>
-	</select>
+	
 	<insert id="insert" parameterType="int">
 		<![CDATA[
 			insert into categories values( null, #{blogId }, "기본 카테고리", "기본적으로 생성되는 카테고리입니다", 0)
@@ -44,4 +35,14 @@
 			delete from categories where id=#{id}
 		]]>
 	</delete>
+	<update id="incrementCount" parameterType="int">
+		<![CDATA[
+			update categories set count = count+1 where id=#{id }
+		]]>
+	</update>
+	<update id="decrementCount" parameterType="int">
+		<![CDATA[
+			update categories set count = count-1 where id=#{id }
+		]]>
+	</update>
 </mapper>

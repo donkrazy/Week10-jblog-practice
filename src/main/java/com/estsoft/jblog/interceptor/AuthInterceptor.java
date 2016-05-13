@@ -29,15 +29,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//접근 제어 (인증이 필요함)
 		HttpSession session = request.getSession();
 		if( session == null ) {
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
-			rd.forward( request, response );	
+			response.sendRedirect("/user/login");
+//			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
+//			rd.forward( request, response );	
 			return false;
 		}
 		
 		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
 		if( authUser == null ) {
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
-			rd.forward( request, response );	
+			response.sendRedirect("/user/login");
+//			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/login.jsp");
+//			rd.forward( request, response );	
 			return false;
 		}
 		
