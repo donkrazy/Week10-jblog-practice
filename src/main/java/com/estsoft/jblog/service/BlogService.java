@@ -28,6 +28,7 @@ public class BlogService {
 	
 	public void getBlogByName(String name, Model model){
 		BlogVo blogVo = blogDao.get(name);
+		System.out.println(blogVo);
 		List<CategoryVo> categoryList = categoryDao.getByBlogId(blogVo.getId());
 		CategoryVo firstCategory = categoryList.get(0);
 		List<PostVo> postList = postDao.getByCategoryId(firstCategory.getId()); 

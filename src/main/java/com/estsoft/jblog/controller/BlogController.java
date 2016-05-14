@@ -1,5 +1,7 @@
 package com.estsoft.jblog.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.estsoft.jblog.annotation.Auth;
 import com.estsoft.jblog.annotation.AuthUser;
 import com.estsoft.jblog.service.BlogService;
@@ -31,8 +39,6 @@ import com.estsoft.utils.FileUpload;
 @Controller
 @RequestMapping( "/blog" )
 public class BlogController {
-	private static final String SAVE_PATH = "/springfile";
-	
 	@Autowired
 	private BlogService blogService;
 	
@@ -141,11 +147,12 @@ public class BlogController {
 	}
 	
 	
-	//TODO: ajax 파일 업로드
+	//FIXME: 파일업로드시 blogVo nullPointerException 발생. 왜????
+	//TODO: Service로 코드옮길것, jsp에서 logo lazy load
 	@Auth
 	@RequestMapping(value="/logo", method=RequestMethod.POST)
 	@ResponseBody
-	public Object ajaxList(MultipartHttpServletRequest request, @AuthUser UserVo authUser){	
+	public Object uploadLogo(MultipartHttpServletRequest request, @AuthUser UserVo authUser) throws IllegalStateException, IOException{	
 		Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */
@@ -155,11 +162,41 @@ public class BlogController {
 				String fileOriginalName = mpf.getOriginalFilename(); //파일 이름
 				String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
 				String saveFileName = FileUpload.genSaveFileName( extName );
-				FileUpload.writeFile(mpf, SAVE_PATH, saveFileName);
+				File file = FileUpload.multipartToFile(mpf);
+				//FileUpload.writeFile(mpf, SAVE_PATH, saveFileName);
+				
+				//put file to AWS S3 
+				BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIBGMDSPZWRZSIR5A", "T8L6lP94vqaTz+ZeMMh88oia6xz3Hg5lrtPx6CsM");
+				AmazonS3 s3Client = new AmazonS3Client(awsCreds);
+				s3Client.setEndpoint("https://donkrazy.s3.ap-northeast-2.amazonaws.com");
+			    try {
+				    System.out.println("Uploading a new object to S3 from a file\n");
+				    s3Client.putObject(new PutObjectRequest("/jblog", saveFileName, file));
+			    } catch (AmazonServiceException ase) {
+			    	System.out.println("Caught an AmazonServiceException, which " +
+			    		"means your request made it " +
+			            "to Amazon S3, but was rejected with an error response" +
+			            " for some reason.");
+				    System.out.println("Error Message:    " + ase.getMessage());
+				    System.out.println("HTTP Status Code: " + ase.getStatusCode());
+				    System.out.println("AWS Error Code:   " + ase.getErrorCode());
+				    System.out.println("Error Type:       " + ase.getErrorType());
+				    System.out.println("Request ID:       " + ase.getRequestId());
+			    } catch (AmazonClientException ace) {
+			    	System.out.println("Caught an AmazonClientException, which " +
+			    		"means the client encountered " +
+			            "an internal error while trying to " +
+			            "communicate with S3, " +
+			            "such as not being able to access the network.");
+			    	System.out.println("Error Message: " + ace.getMessage());
+			    }
+			    
+			    
+			    //upload database
+			    blogService.updateLogo(authUser, saveFileName); //업로드한 파일명 DB에 저장
+			    
 				map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
 				map.put("data", saveFileName); //response로 '데이터 : 파일URL'을 보내줌
-				//upload database
-				blogService.updateLogo(authUser, saveFileName); //업로드한 파일명 DB에 저장
 			}
 			return map;
 		}else{	

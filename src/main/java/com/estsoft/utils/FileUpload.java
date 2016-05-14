@@ -1,6 +1,8 @@
 package com.estsoft.utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -40,5 +42,12 @@ public class FileUpload {
         fileName += ( "." + extName );
         
         return fileName;
+	}
+	
+	public static File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException 
+	{
+	        File convFile = new File( multipart.getOriginalFilename());
+	        multipart.transferTo(convFile);
+	        return convFile;
 	}
 }
