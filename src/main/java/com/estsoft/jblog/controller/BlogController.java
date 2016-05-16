@@ -1,9 +1,5 @@
 package com.estsoft.jblog.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,15 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.estsoft.jblog.annotation.Auth;
 import com.estsoft.jblog.annotation.AuthUser;
 import com.estsoft.jblog.service.BlogService;
@@ -34,7 +23,6 @@ import com.estsoft.jblog.vo.BlogVo;
 import com.estsoft.jblog.vo.CategoryVo;
 import com.estsoft.jblog.vo.PostVo;
 import com.estsoft.jblog.vo.UserVo;
-import com.estsoft.utils.FileUpload;
 
 @Controller
 @RequestMapping( "/blog" )
@@ -51,11 +39,9 @@ public class BlogController {
 	@RequestMapping( "/{name}" )
 	public String blogMain(@PathVariable("name") String name, Model model, @RequestParam(value = "cat", required=true, defaultValue="0") int cat) {
 		if(cat==0){
-			//TODO: 카테고리 없이 접근했을때 그냥 블로그의 기본 카테고리로 redirect시키면 될듯
 			blogService.getBlogByName(name, model);
 			return "blog/main";
 		}
-		//TODO: 포스트가 존재하지 않는 카테고리일 때 처리
 		//TODO: 또라이 유저들이 cat에 이상한 입력할때. 근데 string넣으면 400에러뜬다. 400에러페이지 만들기
 		blogService.getBlogByCategoryId(name, model, cat);
 		return "blog/main";
@@ -141,67 +127,18 @@ public class BlogController {
 	@Auth
 	@RequestMapping( value = "/admin", method=RequestMethod.POST )
 	public String adminConfig(@AuthUser UserVo authUser, @ModelAttribute BlogVo blogVo,  Model model) {
-		//TODO: 블로그 주인이 아닐 경우 redirect??
 	        blogService.configBlog(authUser, blogVo);
 		return "redirect:/blog/admin/";
 	}
 	
 	
-	//FIXME: 파일업로드시 blogVo nullPointerException 발생. 왜????
-	//TODO: Service로 코드옮길것, jsp에서 logo lazy load
+	//TODO: jsp에서 logo lazy load?
 	@Auth
 	@RequestMapping(value="/logo", method=RequestMethod.POST)
 	@ResponseBody
-	public Object uploadLogo(MultipartHttpServletRequest request, @AuthUser UserVo authUser) throws IllegalStateException, IOException{	
-		Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
-		Map<String, Object> map = new HashMap<String, Object>();
-		if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */
-			//fileUpload
-			MultipartFile mpf = request.getFile(itr.next());
-			if(mpf.isEmpty() == false){ /* 파일 유효성 확인 */
-				String fileOriginalName = mpf.getOriginalFilename(); //파일 이름
-				String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
-				String saveFileName = FileUpload.genSaveFileName( extName );
-				File file = FileUpload.multipartToFile(mpf);
-				//FileUpload.writeFile(mpf, SAVE_PATH, saveFileName);
-				
-				//put file to AWS S3 
-				BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIBGMDSPZWRZSIR5A", "T8L6lP94vqaTz+ZeMMh88oia6xz3Hg5lrtPx6CsM");
-				AmazonS3 s3Client = new AmazonS3Client(awsCreds);
-				s3Client.setEndpoint("https://donkrazy.s3.ap-northeast-2.amazonaws.com");
-			    try {
-				    System.out.println("Uploading a new object to S3 from a file\n");
-				    s3Client.putObject(new PutObjectRequest("/jblog", saveFileName, file));
-			    } catch (AmazonServiceException ase) {
-			    	System.out.println("Caught an AmazonServiceException, which " +
-			    		"means your request made it " +
-			            "to Amazon S3, but was rejected with an error response" +
-			            " for some reason.");
-				    System.out.println("Error Message:    " + ase.getMessage());
-				    System.out.println("HTTP Status Code: " + ase.getStatusCode());
-				    System.out.println("AWS Error Code:   " + ase.getErrorCode());
-				    System.out.println("Error Type:       " + ase.getErrorType());
-				    System.out.println("Request ID:       " + ase.getRequestId());
-			    } catch (AmazonClientException ace) {
-			    	System.out.println("Caught an AmazonClientException, which " +
-			    		"means the client encountered " +
-			            "an internal error while trying to " +
-			            "communicate with S3, " +
-			            "such as not being able to access the network.");
-			    	System.out.println("Error Message: " + ace.getMessage());
-			    }
-			    
-			    
-			    //upload database
-			    blogService.updateLogo(authUser, saveFileName); //업로드한 파일명 DB에 저장
-			    
-				map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
-				map.put("data", saveFileName); //response로 '데이터 : 파일URL'을 보내줌
-			}
-			return map;
-		}else{	
-			return null;
-		}
+	public Object uploadLogo(MultipartHttpServletRequest request, @AuthUser UserVo authUser){
+		Map<String, Object> map = blogService.uploadLogo(request, authUser);
+		return map;
 	}
 
 }

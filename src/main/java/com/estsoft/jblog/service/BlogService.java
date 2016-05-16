@@ -1,11 +1,19 @@
 package com.estsoft.jblog.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.estsoft.jblog.annotation.AuthUser;
 import com.estsoft.jblog.dao.BlogDao;
 import com.estsoft.jblog.dao.CategoryDao;
 import com.estsoft.jblog.dao.PostDao;
@@ -13,6 +21,7 @@ import com.estsoft.jblog.vo.BlogVo;
 import com.estsoft.jblog.vo.CategoryVo;
 import com.estsoft.jblog.vo.PostVo;
 import com.estsoft.jblog.vo.UserVo;
+import com.estsoft.utils.FileUpload;
 
 @Service
 public class BlogService {
@@ -133,7 +142,39 @@ public class BlogService {
 		blogDao.update(blogVo);
 	}
 
-	public void updateLogo(UserVo authUser, String url) {
-		blogDao.updateLogo(authUser.getName(), url);
+	public Map<String, Object> uploadLogo(MultipartHttpServletRequest request, @AuthUser UserVo userVo) {
+		Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */
+			//fileUpload
+			MultipartFile mpf = request.getFile(itr.next());
+			if(mpf.isEmpty() == false){ /* 파일 유효성 확인 */
+				String fileOriginalName = mpf.getOriginalFilename(); //파일 이름
+				String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
+				String saveFileName = FileUpload.genSaveFileName( extName );
+				File file = null;
+				try {
+					file = FileUpload.multipartToFile(mpf);
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+					return null;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+				//PUT the file to AWS S3 
+				FileUpload.putAWS(saveFileName, file);
+			    
+			    //upload database
+			    blogDao.updateLogo(userVo.getName(), saveFileName); //업로드한 파일명 DB에 저장
+			    String imgurl = "/product-images/"+saveFileName;
+				map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
+				map.put("data", imgurl); //response로 '데이터 : 파일URL'을 보내줌
+			}
+			return map;
+		}else{	
+			return null;
+		}
 	}
 }

@@ -9,7 +9,7 @@
 			<li><a href="${pageContext.request.contextPath}/user/join">회원가입</a><li>
 		</c:when>
 		<c:otherwise>
-			<li><a href="${pageContext.request.contextPath}/user/modify">내 정보(${authUser.name })</a><li>
+			<li><a href="#">내 정보(${authUser.name })</a><li>
 			<li><a href="${pageContext.request.contextPath}/user/logout?next=${requestScope['javax.servlet.forward.servlet_path']}">로그아웃</a><li>
 			<c:if test="${authUser.name==blogVo.name }">
 			<li><a href="${pageContext.request.contextPath}/blog/admin">내 블로그 관리</a></li>
